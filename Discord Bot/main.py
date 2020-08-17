@@ -70,11 +70,11 @@ async def on_message(message):
     elif message.content.startswith("w"):print("Up command") 
     elif message.content.startswith("i"):print("Inventory command")
     elif message.content.startswith("fload"):renderer.world = wsav.Load("save/world.save"); print("Load command")
+    elif message.content.startswith("save"):wsav.Save("save/world.save", renderer.world); print("Save command")
 
     try: renderer.PlayerControls(message.content)
     except: print("Error")
     renderer.Render(str(message.author))
-    wsav.Save("save/world.save", renderer.world)
 
 
     if renderer.InventoryID == 0: Inventory = "**Stone** Dirt Grass"

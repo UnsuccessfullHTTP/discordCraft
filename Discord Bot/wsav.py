@@ -17,6 +17,10 @@ def Load(r):
         e = pickle.load(h)
         print("wsav: Loaded world!")
         h.close()
+        #for x in e:
+        #    for y in x:
+        #        y.draw(x.x, x.y)
+        print(e)
         return e
     except Exception as e:
         print("wsav: Load Error -> ", e)

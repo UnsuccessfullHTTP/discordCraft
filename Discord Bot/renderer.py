@@ -106,7 +106,7 @@ def GenerateWorld():
     global player
     player = block(block.player, 4*16, 480-((8*16)+1))
 
-    wsav.Save("save/world.save", world)
+
 
 
 
