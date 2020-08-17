@@ -20,7 +20,10 @@ def Load(r):
         #for x in e:
         #    for y in x:
         #        y.draw(x.x, x.y)
-        print(e)
+        for x in e:
+            for y in x:
+                y.draw(y.x, y.y)
+            break
         return e
     except Exception as e:
         print("wsav: Load Error -> ", e)

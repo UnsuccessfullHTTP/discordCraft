@@ -1,4 +1,9 @@
+import sys
+sys.path.append('lib')
+
 import wsav
+
+
 import configparser
 config = configparser.ConfigParser()
 config.read("config.ini")
@@ -10,6 +15,7 @@ game_channel = int(config["Channel information"]["channel"])
 import renderer
 import time
 import discord
+import console
 from discord.ext import commands
 
 
@@ -35,9 +41,9 @@ Inventory = "Stone Dirt Grass"
 
 client = commands.Bot(command_prefix="!")
 
-@client.event
-async def on_message(message):
-    global FirstMSG
+@client.event                                                                                           # ------------
+async def on_message(message):                                                                          # ON MESSAGE    
+    global FirstMSG                                                                                     # ------------
     global InventoryID
     global Inventory
     Inventory = " "
@@ -86,12 +92,12 @@ async def on_message(message):
     embed.set_image(url="attachment://image.png")
     embed.add_field(name="**Inventory**", value=Inventory)
     await message.channel.send(file=file, embed=embed)
-    
+    await console.console_input()
 
     
-
-@client.event                                   # ON READY
-async def on_ready():
+                                                                                                        # ---------
+@client.event                                                                                           # ON READY
+async def on_ready():                                                                                   # ---------
     global InventoryID
     InventoryID = 0
     print("Bot is ready"+getTime())
@@ -102,6 +108,7 @@ async def on_ready():
     await channel.send(embed=embed)
     global FirstMSG
     FirstMSG = True
+    await console.console_begin()
     
 
 @client.event
@@ -139,3 +146,4 @@ async def on_reaction_add(reaction, user):
 
 bot_token = open("token/botToken.txt", "r")
 client.run(bot_token.read())
+
