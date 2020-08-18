@@ -69,14 +69,14 @@ class block:
         d.rectangle([(x, y), (x+16, y-16)], fill=(255, 0, 0), outline=(0,0,0), width=0)
 
 # Creates a list containing 5 lists, each of 8 items, all set to 0
-w, h = 410, 310 # Size of the maximum amount of blocks in window (480p)
-world = [[block(0, -100, -100) for f in range(w)] for g in range(h)]
+w, h = 50, 40 # Size of the maximum amount of blocks in window (480p)
+world = [[block(0, f*16, 480-(h*16)) for f in range(w)] for g in range(h)]
 
 def GenerateWorld():
     # Generates a basic world
 
     # Fixed text that displays current version 
-    d.text((10,10), "Project1 test 01082020", fill=(255,255,0), font=font)
+    d.text((10,10), game_version, fill=(255,255,0), font=font)
 
     # Generates grass
     for x in range(40):
@@ -106,12 +106,13 @@ def GenerateWorld():
     global player
     player = block(block.player, 4*16, 480-((8*16)+1))
 
-
+    print("e")
 
 
 
 def PlayerControls(command):
     #fbb = world[int(player.x/16)][int(((480 - player.y)/16)-1)]
+    print(world[int(player.x/16)][int(((480 - player.y)/16)-1)].id)
     
     global InventoryID
     if command == "l":

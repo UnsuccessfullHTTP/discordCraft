@@ -25,6 +25,10 @@ def Load(r):
                 y.draw(y.x, y.y)
             break
         return e
+        '''
+        global player
+        player = block(block.player, 4*16, 480-((8*16)+1))
+        '''
     except Exception as e:
         print("wsav: Load Error -> ", e)
 

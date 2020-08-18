@@ -41,9 +41,10 @@ Inventory = "Stone Dirt Grass"
 
 client = commands.Bot(command_prefix="!")
 
-@client.event                                                                                           # ------------
-async def on_message(message):                                                                          # ON MESSAGE    
-    global FirstMSG                                                                                     # ------------
+@client.event                                                                                           
+async def on_message(message):
+    print("Message detected: ",getTime())
+    global FirstMSG                                                                                     
     global InventoryID
     global Inventory
     Inventory = " "
@@ -68,18 +69,18 @@ async def on_message(message):                                                  
     print("Message detected!"+getTime())
 
     if message.mention_everyone: await message.channel.send("D O N T P I N G @everyone"); print(message.author)
-    elif message.content.startswith("render"): renderer.GenerateWorld(); print("Render command")
-    elif message.content.startswith("l"):print("Left command")
-    elif message.content.startswith("r"):print("Right command")  
-    elif message.content.startswith("b"):print("Build command")   # e l s e i f 
-    elif message.content.startswith("d"):print("Destroy command")   
-    elif message.content.startswith("w"):print("Up command") 
-    elif message.content.startswith("i"):print("Inventory command")
-    elif message.content.startswith("fload"):renderer.world = wsav.Load("save/world.save"); print("Load command")
-    elif message.content.startswith("save"):wsav.Save("save/world.save", renderer.world); print("Save command")
+    elif message.content.startswith("render"): renderer.GenerateWorld(); print("Render command "+getTime())
+    elif message.content.startswith("l"):print("Left command "+getTime())
+    elif message.content.startswith("r"):print("Right command "+getTime())  
+    elif message.content.startswith("b"):print("Build command" +getTime())   # e l s e i f 
+    elif message.content.startswith("d"):print("Destroy command "+getTime())   
+    elif message.content.startswith("w"):print("Up command "+getTime()) 
+    elif message.content.startswith("i"):print("Inventory command "+getTime())
+    elif message.content.startswith("fload"):renderer.world = wsav.Load("save/world.save "); print("Load command "+getTime())
+    elif message.content.startswith("save"):wsav.Save("save/world.save", renderer.world); print("Save command "+getTime())
 
     try: renderer.PlayerControls(message.content)
-    except: print("Error")
+    except Exception as e: print("Error: ", e)
     renderer.Render(str(message.author))
 
 
@@ -92,7 +93,9 @@ async def on_message(message):                                                  
     embed.set_image(url="attachment://image.png")
     embed.add_field(name="**Inventory**", value=Inventory)
     await message.channel.send(file=file, embed=embed)
-    await console.console_input()
+    
+    divline()
+    #await console.console_input()
 
     
                                                                                                         # ---------
@@ -108,12 +111,13 @@ async def on_ready():                                                           
     await channel.send(embed=embed)
     global FirstMSG
     FirstMSG = True
-    await console.console_begin()
+    #await console.console_begin()
     
 
 @client.event
 async def on_reaction_add(reaction, user):
 
+    print("Reaction added! "+str(getTime()))
     global Inventory
     global InventoryID
     command = " "
@@ -127,7 +131,7 @@ async def on_reaction_add(reaction, user):
     elif reaction.emoji == "📦":print("Inventory command"); command = "i"
     
     try: renderer.PlayerControls(command)
-    except: print("Error")
+    except Exception as e: print("Error: ", e)
     renderer.Render(str(user.name))
 
     divline()
