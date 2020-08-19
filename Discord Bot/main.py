@@ -64,6 +64,8 @@ async def on_message(message):
             await message.add_reaction("🔨")
             await message.add_reaction("🔧")
             await message.add_reaction("📦")
+            await message.add_reaction("💾")
+            await message.add_reaction("📥")
         return
     
     print("Message detected!"+getTime())
@@ -76,11 +78,13 @@ async def on_message(message):
     elif message.content.startswith("d"):print("Destroy command "+getTime())   
     elif message.content.startswith("w"):print("Up command "+getTime()) 
     elif message.content.startswith("i"):print("Inventory command "+getTime())
-    elif message.content.startswith("fload"):renderer.world = wsav.Load("save/world.save "); print("Load command "+getTime())
+    elif message.content.startswith("fload"):global world; renderer.world = wsav.Load("save/world.save "); print("Load command "+getTime())
     elif message.content.startswith("save"):wsav.Save("save/world.save", renderer.world); print("Save command "+getTime())
 
+    print("h")
     try: renderer.PlayerControls(message.content)
-    except Exception as e: print("Error: ", e)
+    except Exception as e: print("PlayerControls Error: ", e)
+    
     renderer.Render(str(message.author))
 
 
@@ -129,6 +133,8 @@ async def on_reaction_add(reaction, user):
     elif reaction.emoji == "🔨":print("Destroy command"); command = "d"
     elif reaction.emoji == "🔧":print("Up command"); command = "b"
     elif reaction.emoji == "📦":print("Inventory command"); command = "i"
+    elif reaction.emoji == "💾":wsav.Save("save/world.save", renderer.world); print("Save command "+getTime())
+    elif reaction.emoji == "📥":global world; renderer.world = wsav.Load("save/world.save "); print("Load command "+getTime())
     
     try: renderer.PlayerControls(command)
     except Exception as e: print("Error: ", e)

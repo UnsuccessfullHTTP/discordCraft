@@ -1,4 +1,5 @@
 import pickle
+import renderer
 
 
 def Save(r, a):
@@ -15,20 +16,20 @@ def Load(r):
     try:
         h = open(r, "rb")
         e = pickle.load(h)
-        print("wsav: Loaded world!")
         h.close()
         #for x in e:
         #    for y in x:
         #        y.draw(x.x, x.y)
         for x in e:
             for y in x:
-                y.draw(y.x, y.y)
-            break
-        return e
-        '''
-        global player
-        player = block(block.player, 4*16, 480-((8*16)+1))
-        '''
+                y.draw(y.x, y.y, y.id)
+                #print(y.x, " ", y.y, " ", y.id)
+            
+        
+        renderer.spawnPlayer()
+        print(renderer.player.x)
+        print("wsav: Loaded world!")
+        
     except Exception as e:
         print("wsav: Load Error -> ", e)
 

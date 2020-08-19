@@ -1,23 +1,32 @@
-import wsav
+
 from PIL import Image, ImageDraw, ImageFont
 
 import configparser
 config = configparser.ConfigParser()
 config.read("config.ini")
 
-game_version = config["Version information"]["game_version"]
-num_version = config["Version information"]["num_version"]
-game_channel = int(config["Channel information"]["channel"])
+try:
+    game_version = config["Version information"]["game_version"]
+    num_version = config["Version information"]["num_version"]
+    game_channel = int(config["Channel information"]["channel"])
+except Exception as e:
+    print("Renderer config error: ", e)
+    game_version = "Null"
+    num_version = "Null"
+    game_channel = "0"
 
 # Initialization
 global InventoryID
+global player
 InventoryID = 0
-font = ImageFont.truetype("FFFFORWA.TTF", 10)
+try: font = ImageFont.truetype("FFFFORWA.TTF", 10)
+except Exception as e: print("Renderer couldn't load font: ", e) 
 img = Image.new('RGB', (640, 480), color = (73, 109, 137))
 d = ImageDraw.Draw(img)
 global userList
 global userCount
 
+import wsav
 # Block ID variables definition
 
 
@@ -64,13 +73,29 @@ class block:
         d.rectangle([(x, y), (x+16, y-16)], fill=color, outline=(0,0,0), width=0) 
     def delete(self, x, y):
         d.rectangle([(x, y), (x+16, y-16)], fill=(73, 109, 137), outline=(0,0,0), width=0)
-    def draw(self, x, y):
+    def draw(self, x, y, id):
         #Renders object
-        d.rectangle([(x, y), (x+16, y-16)], fill=(255, 0, 0), outline=(0,0,0), width=0)
+        color = None
+        if id == 0: color = (73, 109, 137)
+        elif id == 1: color = (97, 216, 0)
+        elif id == 2: color = (147, 130, 50)
+        elif id == 3: color = (94, 94, 93)
+        elif id == 4: color = (38, 38, 38)
+        elif id == 5: color = (255, 0, 0) #Player btw
+        d.rectangle([(x, y), (x+16, y-16)], fill=color, outline=(0,0,0), width=0)
 
 # Creates a list containing 5 lists, each of 8 items, all set to 0
 w, h = 50, 40 # Size of the maximum amount of blocks in window (480p)
+global world
 world = [[block(0, f*16, 480-(h*16)) for f in range(w)] for g in range(h)]
+# Spawn player
+global player
+player = block(block.player, 4*16, 480-((8*16)+1))
+
+def spawnPlayer():
+    global player
+    player = block(block.player, 4*16, 480-((8*16)+1))
+
 
 def GenerateWorld():
     # Generates a basic world
@@ -102,27 +127,26 @@ def GenerateWorld():
     for x in range(40):
         world[x][0] = block(block.bedrock, x*16, 480-(0*16))
 
-    # Spawn player
-    global player
-    player = block(block.player, 4*16, 480-((8*16)+1))
-
+    spawnPlayer()
     print("e")
 
 
 
 def PlayerControls(command):
     #fbb = world[int(player.x/16)][int(((480 - player.y)/16)-1)]
-    print(world[int(player.x/16)][int(((480 - player.y)/16)-1)].id)
+    #print(world[int(player.x/16)][int(((480 - player.y)/16)-1)].id)
     
+    print("PlayerControls command: ", command)
     global InventoryID
     if command == "l":
         player.delete(player.x, player.y)
         player.x = player.x - 16
-        player.draw(player.x, player.y)
+        player.draw(player.x, player.y, player.id)
+    
     elif command == "r":
         player.delete(player.x, player.y)
         player.x = player.x + 16
-        player.draw(player.x, player.y)
+        player.draw(player.x, player.y, player.id)
     elif command == "b":
         if InventoryID == 0:
             bbi = 3
@@ -132,15 +156,15 @@ def PlayerControls(command):
             bbi = 1
         world[int(player.x/16)][int(player.y/16)] = block(bbi, player.x, player.y)
         player.y = player.y - 16
-        player.draw(player.x, player.y)
+        player.draw(player.x, player.y, player.id)
     elif command == "d":
         world[int(player.x/16)][int(player.y/16)] = block(0, player.x, player.y)
         player.y = player.y + 16
-        player.draw(player.x, player.y)
+        player.draw(player.x, player.y, player.id)
     elif command == "w":
         player.delete(player.x, player.y)
         player.y = player.y - 16
-        player.draw(player.x, player.y)
+        player.draw(player.x, player.y, player.id)
     elif command == "i":
         if InventoryID == 2:
             InventoryID = 0
