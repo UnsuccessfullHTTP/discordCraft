@@ -41,6 +41,12 @@ Inventory = "Stone Dirt Grass"
 
 client = commands.Bot(command_prefix="!")
 
+'''
+--------------------------------------------------------------------
+                            ON MESSAGE
+--------------------------------------------------------------------
+'''
+
 @client.event                                                                                           
 async def on_message(message):
     print("Message detected: ",getTime())
@@ -79,7 +85,11 @@ async def on_message(message):
     elif message.content.startswith("w"):print("Up command "+getTime()) 
     elif message.content.startswith("i"):print("Inventory command "+getTime())
     elif message.content.startswith("fload"):global world; renderer.world = wsav.Load("save/world.save "); print("Load command "+getTime())
-    elif message.content.startswith("save"):wsav.Save("save/world.save", renderer.world); print("Save command "+getTime())
+    elif message.content.startswith("save"):
+        wsav.Save("save/world.save", renderer.world)
+        print("Save command "+getTime())
+        embed = discord.Embed(title="**Game saved!**", color=0x00ff00)
+        await message.channel.send(embed=embed)
 
     print("h")
     try: renderer.PlayerControls(message.content)
@@ -88,9 +98,10 @@ async def on_message(message):
     renderer.Render(str(message.author))
 
 
-    if renderer.InventoryID == 0: Inventory = "**Stone** Dirt Grass"
-    elif renderer.InventoryID == 1: Inventory = "Stone **Dirt** Grass"
-    elif renderer.InventoryID == 2: Inventory = "Stone Dirt **Grass**"
+    if renderer.InventoryID == 0: Inventory = "**Stone** Dirt Grass Water"
+    elif renderer.InventoryID == 1: Inventory = "Stone **Dirt** Grass Water"
+    elif renderer.InventoryID == 2: Inventory = "Stone Dirt **Grass** Water"
+    elif renderer.InventoryID == 3: Inventory = "Stone Dirt Grass **Water**"
 
     embed = discord.Embed(title=game_version+" Playable Embed", description="**Controlls:** \n -  **render:** Makes new world \n -  **l and r:** Move to left/right \n -  **b and d:** Build / Destroy \n -  **w:** Move upwards \n \n **WARNING: This bot is in early development**", color=0x00ff00) #creates embed
     file = discord.File("imgrender/render.png", filename="image.png")
@@ -100,11 +111,13 @@ async def on_message(message):
     
     divline()
     #await console.console_input()
-
-    
-                                                                                                        # ---------
-@client.event                                                                                           # ON READY
-async def on_ready():                                                                                   # ---------
+'''
+--------------------------------------------------------------------
+                            ON READY
+--------------------------------------------------------------------
+'''
+@client.event                                                                                           
+async def on_ready():                                                                                   
     global InventoryID
     InventoryID = 0
     print("Bot is ready"+getTime())
@@ -117,6 +130,12 @@ async def on_ready():                                                           
     FirstMSG = True
     #await console.console_begin()
     
+'''
+--------------------------------------------------------------------
+                          ON REACTION ADD
+--------------------------------------------------------------------
+'''
+
 
 @client.event
 async def on_reaction_add(reaction, user):
@@ -133,7 +152,12 @@ async def on_reaction_add(reaction, user):
     elif reaction.emoji == "🔨":print("Destroy command"); command = "d"
     elif reaction.emoji == "🔧":print("Up command"); command = "b"
     elif reaction.emoji == "📦":print("Inventory command"); command = "i"
-    elif reaction.emoji == "💾":wsav.Save("save/world.save", renderer.world); print("Save command "+getTime())
+    elif reaction.emoji == "💾":
+        wsav.Save("save/world.save", renderer.world)
+        print("Save command "+getTime())
+        channel = reaction.message.channel
+        embed = discord.Embed(title="**Game saved!**", color=0x00ff00)
+        await channel.send(embed=embed)
     elif reaction.emoji == "📥":global world; renderer.world = wsav.Load("save/world.save "); print("Load command "+getTime())
     
     try: renderer.PlayerControls(command)
@@ -142,9 +166,10 @@ async def on_reaction_add(reaction, user):
 
     divline()
 
-    if renderer.InventoryID == 0: Inventory = "**Stone** Dirt Grass"
-    elif renderer.InventoryID == 1: Inventory = "Stone **Dirt** Grass"
-    elif renderer.InventoryID == 2: Inventory = "Stone Dirt **Grass**"
+    if renderer.InventoryID == 0: Inventory = "**Stone** Dirt Grass Water"
+    elif renderer.InventoryID == 1: Inventory = "Stone **Dirt** Grass Water"
+    elif renderer.InventoryID == 2: Inventory = "Stone Dirt **Grass** Water"
+    elif renderer.InventoryID == 3: Inventory = "Stone Dirt Grass **Water**"
 
     channel = reaction.message.channel
     embed = discord.Embed(title=game_version+" Playable Embed", description="**Controlls:** \n -  **🔄 render:** Makes new world \n -  **⬅️ l and ➡️ r:** Move to left/right \n -  **🔧 b and 🔨 d:** Build / Destroy \n -  **⬆️ w:** Move upwards \n \n **WARNING: This bot is in early development**", color=0x00ff00) #creates embed

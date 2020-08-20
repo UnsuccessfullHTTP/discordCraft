@@ -25,7 +25,8 @@ def Load(r):
                 y.draw(y.x, y.y, y.id)
                 #print(y.x, " ", y.y, " ", y.id)
             
-        
+        try: renderer.player.delete(renderer.player.x, renderer.player.y)
+        except: ("wsav note: world hasn't rendered so player delition was skipped")
         renderer.spawnPlayer()
         print(renderer.player.x)
         print("wsav: Loaded world!")
