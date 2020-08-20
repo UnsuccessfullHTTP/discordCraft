@@ -11,6 +11,7 @@ config.read("config.ini")
 game_version = config["Version information"]["game_version"]
 num_version = config["Version information"]["num_version"]
 game_channel = int(config["Channel information"]["channel"])
+bot_token = config["Bot configuration"]["bot_token"]
 
 import renderer
 import time
@@ -18,7 +19,14 @@ import discord
 import console
 from discord.ext import commands
 
-
+def printLog(p):
+    if config["Bot configuration"]["log"] == "0":
+        print(p)
+    else:
+        txtLog = open("bot.log", "a")
+        txtLog.append(p)
+        txtLog.close
+        
 
 global FirstMSG
 FirstMSG = True
@@ -91,7 +99,6 @@ async def on_message(message):
         embed = discord.Embed(title="**Game saved!**", color=0x00ff00)
         await message.channel.send(embed=embed)
 
-    print("h")
     try: renderer.PlayerControls(message.content)
     except Exception as e: print("PlayerControls Error: ", e)
     
@@ -179,6 +186,5 @@ async def on_reaction_add(reaction, user):
     await channel.send(file=file, embed=embed)
     renderer.Render(str(user))
 
-bot_token = open("token/botToken.txt", "r")
-client.run(bot_token.read())
+client.run(bot_token)
 

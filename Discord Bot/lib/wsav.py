@@ -28,9 +28,7 @@ def Load(r):
         try: renderer.player.delete(renderer.player.x, renderer.player.y)
         except: ("wsav note: world hasn't rendered so player delition was skipped")
         renderer.spawnPlayer()
-        print(renderer.player.x)
         print("wsav: Loaded world!")
         
     except Exception as e:
         print("wsav: Load Error -> ", e)
-
