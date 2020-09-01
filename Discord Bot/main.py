@@ -57,7 +57,7 @@ client = commands.Bot(command_prefix="!")
 
 @client.event                                                                                           
 async def on_message(message):
-    print("Message detected: ",getTime())
+    print("Message detected: "+"User: "+str(message.author)+" Contents: "+str(message.content)+" Time: "+getTime())
     global FirstMSG                                                                                     
     global InventoryID
     global Inventory
@@ -147,7 +147,7 @@ async def on_ready():
 @client.event
 async def on_reaction_add(reaction, user):
 
-    print("Reaction added! "+str(getTime()))
+    print("Reaction added! "+"User: "+str(user)+" Emoji: "+str(reaction.emoji)+"  Time:"+(getTime()))
     global Inventory
     global InventoryID
     command = " "
