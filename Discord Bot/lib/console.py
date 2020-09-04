@@ -7,7 +7,7 @@
 async def console_begin():
     print("--------")
     print("Python console by UnsuccesfulHttp")
-    print("Execute #console_help()# without # for help!")
+    print("Execute console_help() without for help!")
     print("WARNING: This could break the bot if misused, please use with caution")
     print("--------")
     await console_input()

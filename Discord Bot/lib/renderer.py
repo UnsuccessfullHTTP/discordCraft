@@ -137,12 +137,12 @@ def GenerateWorld():
 
 
 
-def PlayerControls(command):
+def PlayerControls(command, player):
     #fbb = world[int(player.x/16)][int(((480 - player.y)/16)-1)]
     #print(world[int(player.x/16)][int(((480 - player.y)/16)-1)].id)
     
     print("PlayerControls command: ", command)
-    global player
+    
     global InventoryID
     if command == "l":
         player.delete(player.x, player.y)
