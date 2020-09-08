@@ -1,2 +1,2 @@
-# discordCraft
+# Discord Craft
  
