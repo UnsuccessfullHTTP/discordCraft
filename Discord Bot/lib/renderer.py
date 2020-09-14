@@ -1,3 +1,6 @@
+import time
+def getTime():
+    return "    " + time.ctime(time.time)
 
 from PIL import Image, ImageDraw, ImageFont
 
@@ -141,13 +144,14 @@ def PlayerControls(command, player):
     #fbb = world[int(player.x/16)][int(((480 - player.y)/16)-1)]
     #print(world[int(player.x/16)][int(((480 - player.y)/16)-1)].id)
     
-    print("PlayerControls command: ", command)
+    print("PlayerControls")
     
     global InventoryID
     if command == "l":
         player.delete(player.x, player.y)
         player.x = player.x - 16
         player.draw(player.x, player.y, player.id)
+	print("Left command: "+getTime())
     
     elif command == "r":
         player.delete(player.x, player.y)
