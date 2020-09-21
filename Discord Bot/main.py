@@ -1,4 +1,5 @@
 import sys
+import os
 sys.path.append('lib')
 
 import wsav
@@ -11,7 +12,7 @@ config.read("config.ini")
 game_version = config["Version information"]["game_version"]
 num_version = config["Version information"]["num_version"]
 game_channel = int(config["Channel information"]["channel"])
-bot_token = config["Bot configuration"]["bot_token"]
+bot_token = os.environ['DiscordCraftBotToken']
 
 import renderer
 import time
