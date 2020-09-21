@@ -1,6 +1,6 @@
 import time
 def getTime():
-    return "    " + time.ctime(time.time)
+    return "    " + time.ctime(time.time())
 
 from PIL import Image, ImageDraw, ImageFont
 
@@ -50,6 +50,12 @@ import wsav
  Makes a block
  
  '''
+
+'''
+--------------------------------------------------------------------
+                            BLOCK CLASS
+--------------------------------------------------------------------
+'''
 class block:
 
     air = 0
@@ -102,6 +108,11 @@ def spawnPlayer():
     global player
     player = block(block.player, 4*16, 480-((8*16)+1))
 
+'''
+--------------------------------------------------------------------
+                        WORLD GENERATOR
+--------------------------------------------------------------------
+'''
 
 def GenerateWorld():
     # Generates a basic world
@@ -139,6 +150,11 @@ def GenerateWorld():
     print("e")
 
 
+'''
+--------------------------------------------------------------------
+                            PLAYER COMMANDS
+--------------------------------------------------------------------
+'''
 
 def PlayerControls(command, player):
     #fbb = world[int(player.x/16)][int(((480 - player.y)/16)-1)]
@@ -151,12 +167,13 @@ def PlayerControls(command, player):
         player.delete(player.x, player.y)
         player.x = player.x - 16
         player.draw(player.x, player.y, player.id)
-	print("Left command: "+getTime())
+        print("Left command: "+getTime())
     
     elif command == "r":
         player.delete(player.x, player.y)
         player.x = player.x + 16
         player.draw(player.x, player.y, 5)
+        print("Right command "+getTime())
     elif command == "b":
         '''
         Why does this work
@@ -175,17 +192,21 @@ def PlayerControls(command, player):
         player.draw(player.x, player.y, 5); player.delete(player.x, player.y+16)
 
         world[int(player.x/16)][int(player.y/16)+1] = block(bbi, player.x, player.y+16)
+        print("Build command" +getTime()) 
 
     elif command == "d":
         
         player.y = player.y + 16
         player.draw(player.x, player.y, player.id)
         world[int(player.x/16)][int(player.y/16)] = block(0, player.x, player.y-16)
+        print("Destroy command "+getTime())
     elif command == "w":
         player.delete(player.x, player.y)
         player.y = player.y - 16
         player.draw(player.x, player.y, player.id)
+        print("Up command "+getTime())
     elif command == "i":
+        print("Inventory command "+getTime())
         if InventoryID == 3:
             InventoryID = 0
         else:
@@ -196,6 +217,12 @@ def PlayerControls(command, player):
 
 userCount = 0
 userList = [None]
+
+'''
+--------------------------------------------------------------------
+                        IMAGE RENDERING
+--------------------------------------------------------------------
+'''
 
 def Render(user):
     x = 1

@@ -86,12 +86,6 @@ async def on_message(message):
 
     if message.mention_everyone: await message.channel.send("D O N T P I N G @everyone"); print(message.author)
     elif message.content.startswith("render"): renderer.GenerateWorld(); print("Render command "+getTime())
-    elif message.content.startswith("l"):print("Left command "+getTime())
-    elif message.content.startswith("r"):print("Right command "+getTime())  
-    elif message.content.startswith("b"):print("Build command" +getTime())   # e l s e i f 
-    elif message.content.startswith("d"):print("Destroy command "+getTime())   
-    elif message.content.startswith("w"):print("Up command "+getTime()) 
-    elif message.content.startswith("i"):print("Inventory command "+getTime())
     elif message.content.startswith("fload"):global world; renderer.world = wsav.Load("save/world.save "); print("Load command "+getTime())
     elif message.content.startswith("save"):
         wsav.Save("save/world.save", renderer.world)
@@ -153,12 +147,12 @@ async def on_reaction_add(reaction, user):
     command = " "
     if user == client.user: return
     if reaction.emoji == "🔄":renderer.GenerateWorld();print("Render command")
-    elif reaction.emoji == "⬅️":print("Left command"); command = "l"
-    elif reaction.emoji == "➡️":print("Right command"); command = "r"  
-    elif reaction.emoji == "⬆️":print("Build command"); command = "w"
-    elif reaction.emoji == "🔨":print("Destroy command"); command = "d"
-    elif reaction.emoji == "🔧":print("Up command"); command = "b"
-    elif reaction.emoji == "📦":print("Inventory command"); command = "i"
+    elif reaction.emoji == "⬅️":command = "l"
+    elif reaction.emoji == "➡️":command = "r"  
+    elif reaction.emoji == "⬆️":command = "w"
+    elif reaction.emoji == "🔨":command = "d"
+    elif reaction.emoji == "🔧":command = "b"
+    elif reaction.emoji == "📦":command = "i"
     elif reaction.emoji == "💾":
         wsav.Save("save/world.save", renderer.world)
         print("Save command "+getTime())
