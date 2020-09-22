@@ -169,3 +169,5 @@ Feel free to contact me:
 Email: **unsuccesfulhttp@protonmail.com**
 
 Discord: **UnsuccessfulHTTP#0239**
+
+Try the bot: **https://discord.gg/6Z2z7zx** 
