@@ -13,6 +13,10 @@ game_version = config["Version information"]["game_version"]
 num_version = config["Version information"]["num_version"]
 game_channel = int(config["Channel information"]["channel"])
 bot_token = os.environ['DiscordCraftBotToken']
+cmd_channels = config._sections["Channels"]
+
+for x in cmd_channels:
+    command_channels = cmd_channels[x]
 
 import renderer
 import time
@@ -65,7 +69,14 @@ async def on_message(message):
     Inventory = " "
     
 
-    if message.channel != client.get_channel(game_channel): return
+    if str(message.channel) in command_channels:
+        pass
+        print("h")
+    else:
+        print("hh")
+        print(message.channel)
+        print(command_channels)
+        return
     if message.author == client.user:
         time.sleep(1)
         if FirstMSG == True:
@@ -146,6 +157,10 @@ async def on_reaction_add(reaction, user):
     global Inventory
     global InventoryID
     command = " "
+    if reaction.message.channel in command_channels:
+        pass
+    else:
+        return
     if user == client.user: return
     if reaction.emoji == "🔄":renderer.GenerateWorld();print("Render command")
     elif reaction.emoji == "⬅️":command = "l"
