@@ -5,6 +5,15 @@ sys.path.append('lib')
 import wsav
 
 
+def getKeysByValue(dictOfElements, valueToFind):
+    listOfKeys = list()
+    listOfItems = dictOfElements.items()
+    for item  in listOfItems:
+        if item[1] == valueToFind:
+            listOfKeys.append(item[0])
+    return  listOfKeys
+
+
 import configparser
 config = configparser.ConfigParser()
 config.read("config.ini")
@@ -14,6 +23,9 @@ num_version = config["Version information"]["num_version"]
 game_channel = int(config["Channel information"]["channel"])
 bot_token = os.environ['DiscordCraftBotToken']
 cmd_channels = config._sections["Channels"]
+
+global currentplayID
+currentplayID = 0
 
 command_channels = []
 for x in cmd_channels:
@@ -67,6 +79,7 @@ async def on_message(message):
     global FirstMSG                                                                                     
     global InventoryID
     global Inventory
+    global currentplayID
     Inventory = " "
     
     command_channels_check = False 
@@ -74,6 +87,7 @@ async def on_message(message):
         if str(message.channel.id) == x:
             command_channels_check = True
             print("Play ID: ", x)
+            currentplayID = x
             break
     if command_channels_check == False:
         return
@@ -121,6 +135,7 @@ async def on_message(message):
     embed = discord.Embed(title=game_version+" Playable Embed", description="**Controlls:** \n -  **render:** Makes new world \n -  **l and r:** Move to left/right \n -  **b and d:** Build / Destroy \n -  **w:** Move upwards \n \n **WARNING: This bot is in early development**", color=0x00ff00) #creates embed
     file = discord.File("imgrender/render.png", filename="image.png")
     embed.set_image(url="attachment://image.png")
+    embed.set_footer(text=("PlayID "+currentplayID))
     embed.add_field(name="**Inventory**", value=Inventory)
     await message.channel.send(file=file, embed=embed)
     

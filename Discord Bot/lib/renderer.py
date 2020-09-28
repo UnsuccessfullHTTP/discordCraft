@@ -12,11 +12,15 @@ try:
     game_version = config["Version information"]["game_version"]
     num_version = config["Version information"]["num_version"]
     game_channel = int(config["Channel information"]["channel"])
+    cmd_channels = config._sections["Channels"]
+
 except Exception as e:
     print("Renderer config error: ", e)
     game_version = "Null"
     num_version = "Null"
     game_channel = "0"
+
+
 
 # Initialization
 global InventoryID
@@ -30,6 +34,18 @@ global userList
 global userCount
 
 import wsav
+
+def getKeysByValue(dictOfElements, valueToFind):
+    listOfKeys = list()
+    listOfItems = dictOfElements.items()
+    for item  in listOfItems:
+        if item[1] == valueToFind:
+            listOfKeys.append(item[0])
+    return  listOfKeys
+
+for x in 
+
+
 '''
 # Block ID variables definition
 
@@ -79,7 +95,7 @@ class block:
         elif id == 2: color = (147, 130, 50)
         elif id == 3: color = (94, 94, 93)
         elif id == 4: color = (38, 38, 38)
-        elif id == 5: color = (255, 0, 0)       #Player btw
+        elif id == 5: color = (255, 0, 0)       #Player
         elif id == 6: color = (0, 102, 204)
 
         #Renders object
