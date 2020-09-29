@@ -35,6 +35,12 @@ global userCount
 
 import wsav
 
+color_list = {
+    "discordcraftdev1": 255,
+    "discordCraftDev2": 0
+}
+
+
 def getKeysByValue(dictOfElements, valueToFind):
     listOfKeys = list()
     listOfItems = dictOfElements.items()
@@ -43,7 +49,20 @@ def getKeysByValue(dictOfElements, valueToFind):
             listOfKeys.append(item[0])
     return  listOfKeys
 
-for x in 
+def getPlayerColor(channel, reference_dict, color_list):
+    
+    print("0")
+    a = getKeysByValue(reference_dict, str(channel))
+    print("1")
+    b = a[0]
+    print("2")
+    print(b)
+    print(reference_dict)
+    print("getPlayerColor() Result: "+str(color_list[str(b)]))
+    print("3")
+    return color_list[b]
+    
+    #print("getKeysByValue(): ERROR ", e)
 
 
 '''
@@ -102,7 +121,8 @@ class block:
         d.rectangle([(x, y), (x+16, y-16)], fill=color, outline=(0,0,0), width=0) 
     def delete(self, x, y):
         d.rectangle([(x, y), (x+16, y-16)], fill=(73, 109, 137), outline=(0,0,0), width=0)
-    def draw(self, x, y, id):
+    def draw(self, x, y, id, channel):
+        print("test: ", getPlayerColor(channel, cmd_channels, color_list))
         #Renders object
         color = None
         if id == 0: color = (73, 109, 137)
@@ -113,6 +133,7 @@ class block:
         elif id == 5: color = (255, 0, 0) #Player btw
         elif id == 6: color = (0, 102, 204)
         d.rectangle([(x, y), (x+16, y-16)], fill=color, outline=(0,0,0), width=0)
+       #print("test: ", getPlayerColor(channel, cmd_channels, color_list))
 
 # Creates a list containing 5 lists, each of 8 items, all set to 0
 
@@ -172,7 +193,7 @@ def GenerateWorld():
 --------------------------------------------------------------------
 '''
 
-def PlayerControls(command, player):
+def PlayerControls(command, player, channel):
     #fbb = world[int(player.x/16)][int(((480 - player.y)/16)-1)]
     #print(world[int(player.x/16)][int(((480 - player.y)/16)-1)].id)
     
@@ -182,13 +203,13 @@ def PlayerControls(command, player):
     if command == "l":
         player.delete(player.x, player.y)
         player.x = player.x - 16
-        player.draw(player.x, player.y, player.id)
+        player.draw(player.x, player.y, player.id, channel)
         print("Left command: "+getTime())
     
     elif command == "r":
         player.delete(player.x, player.y)
         player.x = player.x + 16
-        player.draw(player.x, player.y, 5)
+        player.draw(player.x, player.y, 5, channel)
         print("Right command "+getTime())
     elif command == "b":
         '''
@@ -205,7 +226,7 @@ def PlayerControls(command, player):
 
         player.y = player.y - 16
 
-        player.draw(player.x, player.y, 5); player.delete(player.x, player.y+16)
+        player.draw(player.x, player.y, 5, channel); player.delete(player.x, player.y+16)
 
         world[int(player.x/16)][int(player.y/16)+1] = block(bbi, player.x, player.y+16)
         print("Build command" +getTime()) 
@@ -213,14 +234,20 @@ def PlayerControls(command, player):
     elif command == "d":
         
         player.y = player.y + 16
-        player.draw(player.x, player.y, player.id)
+        player.draw(player.x, player.y, player.id, channel)
         world[int(player.x/16)][int(player.y/16)] = block(0, player.x, player.y-16)
         print("Destroy command "+getTime())
     elif command == "w":
+        print("bruh")
+        print(channel)
         player.delete(player.x, player.y)
         player.y = player.y - 16
-        player.draw(player.x, player.y, player.id)
+        #try:
+        player.draw(player.x, player.y, 5, channel)
+        #except Exception as e:
+            #print("h ::::", e, " ",channel, " ", type(channel))
         print("Up command "+getTime())
+
     elif command == "i":
         print("Inventory command "+getTime())
         if InventoryID == 3:

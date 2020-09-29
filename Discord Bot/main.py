@@ -121,7 +121,7 @@ async def on_message(message):
         embed = discord.Embed(title="**Game saved!**", color=0x00ff00)
         await message.channel.send(embed=embed)
 
-    try: renderer.PlayerControls(message.content, renderer.player)
+    try: renderer.PlayerControls(message.content, renderer.player, message.channel.id)
     except Exception as e: print("PlayerControls Error: ", e)
     
     renderer.Render(str(message.author))
@@ -200,8 +200,9 @@ async def on_reaction_add(reaction, user):
         await channel.send(embed=embed)
     elif reaction.emoji == "📥":global world; renderer.world = wsav.Load("save/world.save "); print("Load command "+getTime())
     
-    try: renderer.PlayerControls(command, renderer.player)
-    except Exception as e: print("Error: ", e)
+    #try: 
+    renderer.PlayerControls(command, renderer.player, reaction.message.channel.id)
+    #except Exception as e: print("PlayerControls Error: ", e)
     renderer.Render(str(user.name))
 
     divline()
