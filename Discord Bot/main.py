@@ -55,7 +55,7 @@ def divline():
     print ("------------")
 
 divline()
-print("UnsuccesfulHttp DiscordCraft made in July 2020 - August 2020")
+print("UnsuccesfulHttp DiscordCraft made in July 2020 - October 2020")
 print("Current game version: "+game_version)
 print("Bot program started!"+getTime())
 divline()
@@ -124,10 +124,10 @@ async def on_message(message):
         embed = discord.Embed(title="**Game saved!**", color=0x00ff00)
         await message.channel.send(embed=embed)
 
-    try: renderer.PlayerControls(message.content, renderer.player, message.channel.id)
+    try: renderer.PlayerControls(message.content, renderer.getPlayer(message.channel.id), message.channel.id)
     except Exception as e: print("PlayerControls Error (Message): ", e)
     
-    renderer.Render(str(message.author))
+    renderer.Render(str(message.author), message.channel.id)
 
 
     if renderer.InventoryID == 0: Inventory = "**Stone** Dirt Grass Water"
@@ -204,10 +204,10 @@ async def on_reaction_add(reaction, user):
     elif reaction.emoji == "📥":global world; renderer.world = wsav.Load("save/world.save "); print("Load command "+getTime())
     
     try: 
-        renderer.PlayerControls(command, renderer.player, reaction.message.channel.id)
+        renderer.PlayerControls(command, renderer.getPlayer(reaction.message.channel.id), reaction.message.channel.id)
     except Exception as e: 
         print("PlayerControls Error: ", e)
-    renderer.Render(str(user.name))
+    renderer.Render(str(user.name), reaction.message.channel.id)
 
     divline()
 
@@ -223,7 +223,7 @@ async def on_reaction_add(reaction, user):
     file = discord.File("imgrender/render.png", filename="image.png")
     await reaction.message.channel.send(file=file, embed=embed)
     await reaction.message.delete()
-    renderer.Render(str(user))
+    renderer.Render(str(user), message.channel.id)
 
 client.run(bot_token)
 

@@ -1,4 +1,5 @@
 import time
+import sys, os
 def getTime():
     return "    " + time.ctime(time.time())
 
@@ -26,6 +27,7 @@ except Exception as e:
 import random
 global InventoryID
 global player
+global players
 InventoryID = 0
 try: font = ImageFont.truetype("FFFFORWA.TTF", 10)
 except Exception as e: print("Renderer couldn't load font: ", e) 
@@ -146,12 +148,35 @@ class block:
 # Creates a list containing 5 lists, each of 8 items, all set to 0
 
 # Spawn player
-global player
-player = block(block.player, 4*16, 480-((8*16)+1))
 
+#global player
+#player = block(block.player, 4*16, 480-((8*16)+1))
+
+players = {}
+for x in cmd_channels:
+    players.update({str(x):block(block.player, 4*16, 480-((8*16)+1))})
+
+'''
 def spawnPlayer():
     global player
     player = block(block.player, 4*16, 480-((8*16)+1))
+'''
+def spawnPlayers():
+    global players
+    players.update({str(x):block(block.player, 4*16, 480-((8*16)+1))})
+
+
+def getPlayer(channel):
+    global players
+    try:
+        print(players)
+        a = getKeysByValue(cmd_channels, str(channel))
+        return players[a[0]]
+    except Exception as e:
+        exc_type, exc_obj, exc_tb = sys.exc_info()
+        fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+        print(exc_type, fname, exc_tb.tb_lineno, e)
+
 
 '''
 --------------------------------------------------------------------
@@ -191,7 +216,7 @@ def GenerateWorld():
     for x in range(40):
         world[x][0] = block(block.bedrock, x*16, 480-(0*16))
 
-    spawnPlayer()
+    spawnPlayers()
     print("e")
 
 
@@ -272,22 +297,26 @@ userList = [None]
 --------------------------------------------------------------------
 '''
 
-def Render(user):
+def Render(user, channel):
     x = 1
-    global UserAlreadyExists
+    userList = ["Null"]
     UserAlreadyExists = False
-    if userList[0] == None:
-        userList[0] = user
-    
-    for x in userList:
-        if x == user.split("#")[0]:
-            UserAlreadyExists = True
-            pass
+    if user in userList:
+        UserAlreadyExists = True
+
+    a = user.split("#")[0]
 
     if UserAlreadyExists == False:
-        print("Renderer.Render(): user appended -> ", user)
-        userList.append(user)
-    for x in range(len(userList)):
-        d.text((10,50+(20*x)), "User: "+userList[x], fill=(255,255,0), font=font)
+        print("Renderer.Render(): user appended -> ", a)
+        userList.append(a)
+        color_seed = getPlayerColor(channel, cmd_channels, color_list)
+        random.seed(color_seed*1234)
+        color_a = random.randrange(0, 256)
+        random.seed(color_seed*2345)
+        color_b = random.randrange(0, 256)
+        random.seed(color_seed*3456)
+        color_c = random.randrange(0, 256)
+        d.text((10,50+(20*x)), "User: "+userList[x], fill=(color_a, color_b, color_c), font=font)
+        x = x + 1
     #wsav.Save("save/world.save", world)
     img.save('imgrender/render.png')
