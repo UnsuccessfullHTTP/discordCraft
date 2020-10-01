@@ -100,14 +100,17 @@ async def on_message(message):
             FirstMSG = False
             return
         else: 
-            await message.add_reaction("⬅️")
-            await message.add_reaction("➡️")
-            await message.add_reaction("⬆️")
-            await message.add_reaction("🔨")
-            await message.add_reaction("🔧")
-            await message.add_reaction("📦")
-            await message.add_reaction("💾")
-            await message.add_reaction("📥")
+            try:
+                await message.add_reaction("⬅️")
+                await message.add_reaction("➡️")
+                await message.add_reaction("⬆️")
+                await message.add_reaction("🔨")
+                await message.add_reaction("🔧")
+                await message.add_reaction("📦")
+                await message.add_reaction("💾")
+                await message.add_reaction("📥")
+            except:
+                print("Message doesnt exist")
         return
     
     print("Message detected!"+getTime())
@@ -122,7 +125,7 @@ async def on_message(message):
         await message.channel.send(embed=embed)
 
     try: renderer.PlayerControls(message.content, renderer.player, message.channel.id)
-    except Exception as e: print("PlayerControls Error: ", e)
+    except Exception as e: print("PlayerControls Error (Message): ", e)
     
     renderer.Render(str(message.author))
 
@@ -200,9 +203,10 @@ async def on_reaction_add(reaction, user):
         await channel.send(embed=embed)
     elif reaction.emoji == "📥":global world; renderer.world = wsav.Load("save/world.save "); print("Load command "+getTime())
     
-    #try: 
-    renderer.PlayerControls(command, renderer.player, reaction.message.channel.id)
-    #except Exception as e: print("PlayerControls Error: ", e)
+    try: 
+        renderer.PlayerControls(command, renderer.player, reaction.message.channel.id)
+    except Exception as e: 
+        print("PlayerControls Error: ", e)
     renderer.Render(str(user.name))
 
     divline()
@@ -214,10 +218,11 @@ async def on_reaction_add(reaction, user):
 
     channel = reaction.message.channel
     embed = discord.Embed(title=game_version+" Playable Embed", description="**Controlls:** \n -  **🔄 render:** Makes new world \n -  **⬅️ l and ➡️ r:** Move to left/right \n -  **🔧 b and 🔨 d:** Build / Destroy \n -  **⬆️ w:** Move upwards \n \n **WARNING: This bot is in early development**", color=0x00ff00) #creates embed
-    file = discord.File("imgrender/render.png", filename="image.png")
     embed.set_image(url="attachment://image.png")
     embed.add_field(name="**Inventory**", value=Inventory)
-    await channel.send(file=file, embed=embed)
+    file = discord.File("imgrender/render.png", filename="image.png")
+    await reaction.message.channel.send(file=file, embed=embed)
+    await reaction.message.delete()
     renderer.Render(str(user))
 
 client.run(bot_token)

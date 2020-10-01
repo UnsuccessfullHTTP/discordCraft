@@ -23,6 +23,7 @@ except Exception as e:
 
 
 # Initialization
+import random
 global InventoryID
 global player
 InventoryID = 0
@@ -34,12 +35,12 @@ global userList
 global userCount
 
 import wsav
-
+'''
 color_list = {
     "discordcraftdev1": 255,
-    "discordCraftDev2": 0
+    "discordcraftdev2": 0
 }
-
+'''
 
 def getKeysByValue(dictOfElements, valueToFind):
     listOfKeys = list()
@@ -51,19 +52,19 @@ def getKeysByValue(dictOfElements, valueToFind):
 
 def getPlayerColor(channel, reference_dict, color_list):
     
-    print("0")
-    a = getKeysByValue(reference_dict, str(channel))
-    print("1")
-    b = a[0]
-    print("2")
-    print(b)
-    print(reference_dict)
-    print("getPlayerColor() Result: "+str(color_list[str(b)]))
-    print("3")
-    return color_list[b]
-    
-    #print("getKeysByValue(): ERROR ", e)
+    try:
+        a = getKeysByValue(reference_dict, str(channel))
+        b = a[0]
+        print(b)
+        print(reference_dict)
+        print("getPlayerColor() Result: "+str(color_list[str(b)]))
+        return color_list[b]
+    except Exception as e:
+        print("getKeysByValue(): ERROR ", e)
 
+color_list = {}
+for x in cmd_channels:
+    color_list.update({str(x):random.randrange(0, 256)})
 
 '''
 # Block ID variables definition
@@ -122,7 +123,14 @@ class block:
     def delete(self, x, y):
         d.rectangle([(x, y), (x+16, y-16)], fill=(73, 109, 137), outline=(0,0,0), width=0)
     def draw(self, x, y, id, channel):
-        print("test: ", getPlayerColor(channel, cmd_channels, color_list))
+        color_seed = getPlayerColor(channel, cmd_channels, color_list)
+        random.seed(color_seed*1234)
+        color_a = random.randrange(0, 256)
+        random.seed(color_seed*2345)
+        color_b = random.randrange(0, 256)
+        random.seed(color_seed*3456)
+        color_c = random.randrange(0, 256)
+        print("Random Colors: ", color_a, color_b, color_c)
         #Renders object
         color = None
         if id == 0: color = (73, 109, 137)
@@ -130,7 +138,7 @@ class block:
         elif id == 2: color = (147, 130, 50)
         elif id == 3: color = (94, 94, 93)
         elif id == 4: color = (38, 38, 38)
-        elif id == 5: color = (255, 0, 0) #Player btw
+        elif id == 5: color = (color_a, color_b, color_c)
         elif id == 6: color = (0, 102, 204)
         d.rectangle([(x, y), (x+16, y-16)], fill=color, outline=(0,0,0), width=0)
        #print("test: ", getPlayerColor(channel, cmd_channels, color_list))
@@ -242,10 +250,7 @@ def PlayerControls(command, player, channel):
         print(channel)
         player.delete(player.x, player.y)
         player.y = player.y - 16
-        #try:
         player.draw(player.x, player.y, 5, channel)
-        #except Exception as e:
-            #print("h ::::", e, " ",channel, " ", type(channel))
         print("Up command "+getTime())
 
     elif command == "i":
